@@ -1,0 +1,24 @@
+{
+    "name": "gearbox-solutions/has-one-file",
+    "description": "Adds HasOneFile trait for easy file management for records",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "GearboxSolutions\\HasOneFile\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "David Nahodyl",
+            "email": "david@gearboxgo.com"
+        }
+    ],
+    "require-dev": {
+        "laravel/pint": "^1.19"
+    },
+    "require": {
+        "illuminate/database": "^10.0|^11.0",
+        "illuminate/http": "^10.0|^11.0"
+    }
+}
