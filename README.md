@@ -7,7 +7,7 @@ Adds HasOneFile trait for easy file management for records
 When working with files in Laravel apps, it is common to have a model with a single file associated with it. An example of this might be a "Documents" model, where a record is created for each document uploaded by a user. This package provides a trait that can be added to a model to make it easy to manage files associated with that model.
 
 This provides a few benefits:
- - It provides a consistent way to manage files associated with a model.
+ - Adds a few helper methods to the model to make it easier to work with files.
  - Files are stored in a consistent location
  - Files are automatically deleted from storage when the model is deleted as part of a lifecycle hook.
 
@@ -26,24 +26,42 @@ $document->storeFile($file);
 // delete a previously stored file from a model
 $document->deleteFile();
 
-// get contents of a file from a model
+// check if a file exists for a model
+$document->fileExists();
+
+// get the URL for a file from a model
+// this can be nice to append for a link to the file
+$document->fileUrl;
+
+// get the contents of a file from a model
 $document->getFile();
+
+// get the storage path of a file from a model
+$document->getFilePath();
+
+// get the storage directory of a file from a model
+$document->getStorageDirectory();
+
+// get the storage disk of a file from a model
+$document->getFileStorageDisk();
+
 ```
 
 ## Installation and setup
+Summary:
 
-[1. Install the package via composer](#install-the-package-via-composer)
+[1. Install the package via composer](#1-install-the-package-via-composer)
 
-[2. Add the trait to your model](#add-the-trait-to-your-model-to-enable-file-management-for-that-model)
+[2. Add the trait to your model](#2-add-the-trait-to-your-model-to-enable-file-management-for-that-model)
 
-[3. Add a migration to store the file path in the database](#add-a-migration-to-store-the-file-path-in-the-database)
+[3. Add a migration to store the file path in the database](#3-add-a-migration-to-store-the-file-path-in-the-database)
 
-### Install the package via composer
+### 1. Install the package via composer
 ```bash
 composer require gearbox-solutions/has-one-file
 ```
 
-### Add the trait to your model to enable file management for that model.
+### 2. Add the trait to your model to enable file management for that model.
 
 ```php
 use GearboxSolutions\HasOneFile\Traits\HasOneFile;
@@ -56,8 +74,15 @@ class Document extends Model
 
 ```
 
-### Add a migration to store the file path in the database.
-The HasOneFile trait needs to store the name of the file associated with the model in a column in your database. The default column name used by the trait is `file_path`. You can change this by overriding the `getFilePathColumn` method in your model.
+### 3. Add a migration to store the file path in the database.
+The HasOneFile trait needs to store the name of the file associated with the model in a column in your database. The default column name used by the trait is `file_path`. You can change this by setting a `protected $fileNameField` property in your model.
+
+ Example:
+```php
+Schema::table('documents', function (Blueprint $table) {
+    $table->string('file_name')->nullable();
+});
+```
 
 
 ### Configuring the storage disk
