@@ -1,6 +1,6 @@
 # HasOneFile
 
-Adds HasOneFile trait for easy file management for records
+A HasOneFile trait for easy file management for Laravel models.
 
 ## Introduction
 
