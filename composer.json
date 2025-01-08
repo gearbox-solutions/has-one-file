@@ -1,6 +1,6 @@
 {
     "name": "gearbox-solutions/has-one-file",
-    "description": "Adds HasOneFile trait for easy file management for records",
+    "description": "Adds HasOneFile trait for easy file management for Laravel models",
     "type": "library",
     "license": "MIT",
     "autoload": {
