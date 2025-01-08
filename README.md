@@ -16,15 +16,19 @@ This provides a few benefits:
  Example:
  - A model with a table name of `documents` and a primary key of `125` will have its file stored in a directory called `documents/125/`.
 
-
+ When saving or deleting a file, the file name is stored in the model and the model is saved to make sure the file name is stored in the database without having to manually save the model. This is done by default, but can be skipped by passing an additional `false` argument to the `storeFile` and `deleteFile` methods.
 
 Here are a few quick examples of how to use the trait:
 ```php
-// save a file to a model
+// store a file related to a model
 $document->storeFile($file);
+// store a file related to a model without immediately saving the model
+$document->storeFile($file, false);
 
 // delete a previously stored file from a model
 $document->deleteFile();
+// delete a previously stored file from a model without immediately saving the model
+$document->deleteFile(false);
 
 // check if a file exists for a model
 $document->fileExists();
@@ -75,7 +79,7 @@ class Document extends Model
 ```
 
 ### 3. Add a migration to store the file path in the database.
-The HasOneFile trait needs to store the name of the file associated with the model in a column in your database. The default column name used by the trait is `file_path`. You can change this by setting a `protected $fileNameField` property in your model.
+The HasOneFile trait will store the name of the file associated with the model in a column in your database. The default column name used by the trait is `file_path`. You can change this by setting a `protected $fileNameField` property in your model.
 
  Example:
 ```php
