@@ -15,10 +15,37 @@
         }
     ],
     "require-dev": {
-        "laravel/pint": "^1.19"
+        "laravel/pint": "^1.19",
+        "orchestra/testbench": "^9.9",
+        "phpunit/phpunit": "^11.5"
     },
     "require": {
         "illuminate/database": "^10.0|^11.0",
         "illuminate/http": "^10.0|^11.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GearboxSolutions\\HasOneFile\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
+        ],
+        "lint": [
+            "@php vendor/bin/pint --ansi"
+        ]
     }
 }

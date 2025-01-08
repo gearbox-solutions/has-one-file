@@ -31,8 +31,7 @@ trait HasOneFile
         });
     }
 
-
-        /**
+    /**
      * Store a new file.
      * This will also update the file name field in the database with the new file name and save the model.
      * If the file is an instance of UploadedFile, the file name will be the ClientOriginalName.
@@ -62,7 +61,7 @@ trait HasOneFile
         return $path;
     }
 
-        /**
+    /**
      * Delete the associated file.
      * This will also clear the file name field in the database and save the model.
      *
@@ -81,8 +80,7 @@ trait HasOneFile
         $this->save();
     }
 
-
-        /**
+    /**
      * Check if a file exists for this model.
      */
     public function fileExists(): bool
@@ -109,10 +107,15 @@ trait HasOneFile
                     return null;
                 }
 
-                $path = Storage::disk($this->getFileStorageDisk())->url($this->getStorageDirectory()
-                    .$this->{$this->getFileNameField()});
+                $disk = Storage::disk($this->getFileStorageDisk());
 
-                return $path;
+                // Check if the disk supports URL generation
+                if (method_exists($disk, 'url')) {
+                    return $disk->url($this->getStorageDirectory().$this->{$this->getFileNameField()});
+                }
+
+                // Return null if URL generation is not supported
+                return null;
             },
         );
     }
@@ -124,7 +127,6 @@ trait HasOneFile
     {
         return '/'.$this->getTable().'/'.$this->{$this->primaryKey}.'/';
     }
-
 
     /**
      * Get the storage disk to use for file operations.
