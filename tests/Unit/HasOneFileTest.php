@@ -36,6 +36,17 @@ class HasOneFileTest extends TestCase
     }
 
     #[Test]
+    public function it_can_store_a_file_without_saving(): void
+    {
+        $file = UploadedFile::fake()->create('test.pdf');
+
+        $this->document->storeFile($file, false);
+
+        $this->document->refresh();
+        $this->assertNull($this->document->file_name);
+    }
+
+    #[Test]
     public function it_can_delete_a_file(): void
     {
         $file = UploadedFile::fake()->create('test.pdf');
@@ -48,6 +59,22 @@ class HasOneFileTest extends TestCase
 
         Storage::disk('local')->assertMissing($path);
         $this->assertNull($this->document->file_name);
+    }
+
+    #[Test]
+    public function it_can_delete_a_file_without_saving(): void
+    {
+        $file = UploadedFile::fake()->create('test.pdf');
+        // this will save the file and set the file_name
+        $path = $this->document->storeFile($file);
+
+        // this will delete the file but not save the model
+        $this->document->deleteFile(false);
+
+        // refresh the document to make sure the file_name is not saved
+        $this->document->refresh();
+
+        $this->assertEquals('test.pdf', $this->document->file_name);
     }
 
     #[Test]

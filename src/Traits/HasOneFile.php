@@ -40,7 +40,7 @@ trait HasOneFile
      * @param  File  $file  The file to store.
      * @return string The storage path of the file
      */
-    public function storeFile(File $file): string
+    public function storeFile(File $file, bool $save = true): string
     {
         $storageDirectory = $this->getStorageDirectory();
 
@@ -56,7 +56,9 @@ trait HasOneFile
 
         // record the file name in the database
         $this->{$this->getFileNameField()} = $fileName;
-        $this->save();
+        if ($save) {
+            $this->save();
+        }
 
         return $path;
     }
@@ -67,7 +69,7 @@ trait HasOneFile
      *
      * @throws \Exception If file deletion fails
      */
-    public function deleteFile(): void
+    public function deleteFile(bool $save = true): void
     {
         $storagePath = $this->getStorageDirectory();
         $result = Storage::disk($this->getFileStorageDisk())->deleteDirectory($storagePath);
@@ -77,7 +79,9 @@ trait HasOneFile
         }
 
         $this->{$this->getFileNameField()} = null;
-        $this->save();
+        if ($save) {
+            $this->save();
+        }
     }
 
     /**
