@@ -27,9 +27,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
     protected function defineEnvironment($app): void
     {
-        // Set default filesystem to local
-        config()->set('filesystems.default', 'local');
-        // config()->set('database.default', 'sqlite');
 
     }
 

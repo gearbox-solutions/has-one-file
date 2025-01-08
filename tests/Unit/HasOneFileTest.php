@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace GearboxSolutions\HasOneFile\Tests\Unit;
 
 use GearboxSolutions\HasOneFile\Tests\TestCase;
-use GearboxSolutions\HasOneFile\Traits\HasOneFile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\Test;
 use Workbench\App\Models\Document;
 
 class HasOneFileTest extends TestCase
@@ -21,7 +21,7 @@ class HasOneFileTest extends TestCase
         $this->document = Document::create();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_store_a_file(): void
     {
         $file = UploadedFile::fake()->create('test.pdf');
@@ -35,11 +35,14 @@ class HasOneFileTest extends TestCase
         $this->assertEquals('test.pdf', $this->document->file_name);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_delete_a_file(): void
     {
         $file = UploadedFile::fake()->create('test.pdf');
         $path = $this->document->storeFile($file);
+
+        // assert the file exists before we try to delete it
+        Storage::disk('local')->assertExists($path);
 
         $this->document->deleteFile();
 
@@ -47,7 +50,7 @@ class HasOneFileTest extends TestCase
         $this->assertNull($this->document->file_name);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_if_file_exists(): void
     {
         $this->assertFalse($this->document->fileExists());
@@ -58,7 +61,7 @@ class HasOneFileTest extends TestCase
         $this->assertTrue($this->document->fileExists());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_file_contents(): void
     {
         $file = UploadedFile::fake()->create('test.pdf', 'Test content');
@@ -69,7 +72,7 @@ class HasOneFileTest extends TestCase
         $this->assertNotEmpty($contents);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_file_url(): void
     {
         $file = UploadedFile::fake()->create('test.pdf');
@@ -79,7 +82,7 @@ class HasOneFileTest extends TestCase
         $this->assertEquals($expectedUrl, $this->document->file_url);
     }
 
-    /** @test */
+    #[Test]
     public function it_deletes_file_when_model_is_deleted(): void
     {
         $file = UploadedFile::fake()->create('test.pdf');
@@ -90,15 +93,13 @@ class HasOneFileTest extends TestCase
         Storage::disk('local')->assertMissing($path);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_use_custom_storage_disk(): void
     {
         Storage::fake('custom');
 
         $document = new class extends Document
         {
-            use HasOneFile;
-
             protected $table = 'documents';
 
             public string $fileStorageDisk = 'custom';
@@ -113,7 +114,7 @@ class HasOneFileTest extends TestCase
         Storage::disk('custom')->assertExists($path);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_use_custom_filename_field(): void
     {
         // Create a new table with custom filename field
@@ -126,8 +127,6 @@ class HasOneFileTest extends TestCase
         // Create anonymous class extending Document with custom filename field
         $document = new class extends Document
         {
-            use HasOneFile;
-
             protected $table = 'custom_documents';
 
             public string $fileNameField = 'custom_file_field';

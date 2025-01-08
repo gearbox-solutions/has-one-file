@@ -111,3 +111,12 @@ class Document extends Model
     protected $fileNameField = 'document_name';
 }
 ```
+
+## Testing
+
+Tests are run using [Testbench](https://github.com/orchestral/testbench) and PHPUnit.
+
+To run the tests, you can use the following command:
+```bash
+./vendor/bin/phpunit
+```
