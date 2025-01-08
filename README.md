@@ -35,7 +35,7 @@ $document->fileExists();
 
 // get the URL for a file from a model
 // this can be nice to append for a link to the file
-$document->fileUrl;
+$document->file_url;
 
 // get the contents of a file from a model
 $document->getFile();
