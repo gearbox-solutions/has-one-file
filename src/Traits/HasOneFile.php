@@ -69,19 +69,21 @@ trait HasOneFile
      *
      * @throws \Exception If file deletion fails
      */
-    public function deleteFile(bool $save = true): void
+    public function deleteFile(bool $save = true): bool
     {
         $storagePath = $this->getStorageDirectory();
         $result = Storage::disk($this->getFileStorageDisk())->deleteDirectory($storagePath);
 
         if (! $result) {
-            throw new \Exception('Failed to delete file');
+           return $result;
         }
 
         $this->{$this->getFileNameField()} = null;
         if ($save) {
             $this->save();
         }
+
+        return $result;
     }
 
     /**
