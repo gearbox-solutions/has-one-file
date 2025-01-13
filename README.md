@@ -54,16 +54,18 @@ $document->getFileStorageDisk();
 ## Installation and setup
 Summary:
 
-[1. Install the package via composer](#1-install-the-package-via-composer)
+[1. Install or copy the package](#1-install-or-copy-the-package)
 
 [2. Add the trait to your model](#2-add-the-trait-to-your-model-to-enable-file-management-for-that-model)
 
 [3. Add a migration to store the file path in the database](#3-add-a-migration-to-store-the-file-path-in-the-database)
 
-### 1. Install the package via composer
+### 1. Install or copy the package
 ```bash
 composer require gearbox-solutions/has-one-file
 ```
+
+Alternatively, this package is really just a single file! You can copy the `HasOneFile.php` file to your project, change the namespace from `GearboxSolutions\HasOneFile\Traits` to your own namespace, and add it to your model.
 
 ### 2. Add the trait to your model to enable file management for that model.
 
